@@ -5,7 +5,7 @@ pipeline {
 	}	
 	stages {        
 		stage('Clone'){			
-			steps {git url:'https://github.com/sep-2024-trivandrum/service-registry.git', branch:'main’}			}		
+			steps {git url:'https://github.com/mobasith/dept-service.git', branch:'main’}			}		
 		stage('Build'){			
 			steps {bat "mvn clean install -DskipTests"}		
 		}		
@@ -13,8 +13,11 @@ pipeline {
 			steps{bat "mvn test"}		}		
 		}
 		stage('Deploy') {			
-			steps { bat "docker build -t dept-image ."			    
-			            bat "docker run -p 8081:8081 -d --name dept-container dept-image"}		
+			steps { 
+				bat "docker rm -f dept-container"
+				bat "docker rmi -f dept-image"
+				bat "docker build -t dept-image ."			    
+			         bat "docker run -p 8081:8081 -d --name dept-container dept-image"}		
 		}		
 	}
 }
